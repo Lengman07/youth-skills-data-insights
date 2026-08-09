@@ -1,0 +1,16 @@
+participant_id,name,age,gender,region,education,program,attendance_pct,pre_score,post_score,employment_status,satisfaction
+P001,Akosua Mensah,24,Female,Greater Accra,Tertiary,Data Analytics,92,48,78,Employed,5
+P002,Kwame Asare,27,Male,Ashanti,Tertiary,Web Development,85,52,74,Employed,4
+P003,Adwoa Boateng,22,Female,Central,SHS,Data Analytics,78,41,65,Unemployed,4
+P004,Kofi Mensah,29,Male,Eastern,Tertiary,Cybersecurity,95,61,88,Employed,5
+P005,Abena Owusu,25,Female,Greater Accra,Tertiary,Web Development,88,55,81,Employed,5
+P006,Yaw Ofori,31,Male,Ashanti,SHS,Data Analytics,62,45,57,Unemployed,3
+P007,Efua Addo,23,Female,Western,Tertiary,Data Analytics,91,50,82,Employed,5
+P008,Kojo Frimpong,26,Male,Central,Tertiary,Cybersecurity,73,58,69,Unemployed,3
+P009,Ama Serwaa,21,Female,Eastern,SHS,Web Development,96,39,76,Employed,5
+P010,Daniel Asante,28,Male,Greater Accra,Tertiary,Data Analytics,89,63,85,Employed,4
+P011,Akua Sarpong,24,Female,Ashanti,Tertiary,Cybersecurity,84,47,72,Employed,4
+P012,Kwesi Antwi,30,Male,Western,SHS,Web Development,58,42,51,Unemployed,2
+P013,Adjoa Nyarko,23,Female,Central,Tertiary,Data Analytics,94,56,86,Employed,5
+P014,Samuel Tetteh,27,Male,Eastern,Tertiary,Cybersecurity,87,54,79,Employed,4
+P015,Akosua Owusu,22,Female,Greater Accra,SHS,Web Development,76,44,68,Unemployed,4
