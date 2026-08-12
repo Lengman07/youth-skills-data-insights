@@ -2,6 +2,41 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 # ==========================================
+# CUSTOM DASHBOARD STYLING
+# ==========================================
+
+st.markdown(
+    """
+    <style>
+    .main {
+        padding-top: 1rem;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+
+    h3 {
+        font-size: 1.4rem;
+    }
+
+    [data-testid="stMetricValue"] {
+        font-size: 1.8rem;
+    }
+
+    [data-testid="stMetricLabel"] {
+        font-size: 0.9rem;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+# ==========================================
 # 1. PAGE CONFIGURATION
 # ==========================================
 
@@ -36,8 +71,8 @@ df.loc[
 ] = "Needs Attention"
 
 
-# ==========================================
-# 4. DASHBOARD TITLE
+## ==========================================
+# DASHBOARD HEADER
 # ==========================================
 
 st.title("Youth Skills Data Insights")
@@ -46,9 +81,16 @@ st.markdown(
     "### Youth Skills Training Program Performance Dashboard"
 )
 
-st.write(
-    "This dashboard evaluates participant attendance, learning "
-    "improvement, satisfaction, and employment outcomes."
+st.caption(
+    "Interactive analysis of attendance, learning outcomes, "
+    "satisfaction, and employment performance."
+)
+
+st.markdown(
+    """
+    Use the filters in the sidebar to explore participant outcomes
+    across training programs, regions, demographics, and employment status.
+    """
 )
 
 
@@ -167,11 +209,19 @@ st.divider()
 
 st.subheader("Performance Overview")
 
-st.metric(
-    "Needs Attention",
+attention_col1, attention_col2 = st.columns(2)
+
+attention_col1.metric(
+    "Participants Needing Attention",
     f"{needs_attention:.1f}%"
 )
 
+attention_col2.metric(
+    "Participants Needing Support",
+    int(
+        (filtered_df["performance_flag"] == "Needs Attention").sum()
+    )
+)
 # ==========================================
 # 10. PROGRAM PERFORMANCE
 # ==========================================
@@ -210,39 +260,78 @@ st.plotly_chart(
 
 
 # ==========================================
-# 11. EMPLOYMENT BY PROGRAM
+# PROGRAM PERFORMANCE
 # ==========================================
 
-st.subheader("Employment Rate by Program")
+st.divider()
 
-employment_by_program = (
-    filtered_df
-    .groupby("program")
-    .agg(
-        employment_rate=(
-            "employment_status",
-            lambda x: (x == "Employed").mean() * 100
+col1, col2 = st.columns(2)
+
+with col1:
+
+    st.subheader("Program Performance")
+
+    program_performance = (
+        filtered_df
+        .groupby("program", as_index=False)
+        .agg(
+            participants=("participant_id", "count"),
+            average_attendance=("attendance_pct", "mean"),
+            average_improvement=("score_improvement", "mean"),
+            average_satisfaction=("satisfaction", "mean")
         )
     )
-    .reset_index()
-)
 
-fig_employment = px.bar(
-    employment_by_program,
-    x="program",
-    y="employment_rate",
-    title="Employment Rate by Program",
-    labels={
-        "program": "Training Program",
-        "employment_rate": "Employment Rate (%)"
-    },
-    text_auto=".1f"
-)
+    fig_program = px.bar(
+        program_performance,
+        x="program",
+        y="average_improvement",
+        title="Average Score Improvement",
+        labels={
+            "program": "Training Program",
+            "average_improvement": "Score Improvement"
+        },
+        text_auto=".1f"
+    )
 
-st.plotly_chart(
-    fig_employment,
-    use_container_width=True
-)
+    st.plotly_chart(
+        fig_program,
+        use_container_width=True
+    )
+
+
+with col2:
+
+    st.subheader("Employment Outcomes")
+
+    employment_by_program = (
+        filtered_df
+        .groupby("program")
+        .agg(
+            employment_rate=(
+                "employment_status",
+                lambda x: (x == "Employed").mean() * 100
+            )
+        )
+        .reset_index()
+    )
+
+    fig_employment = px.bar(
+        employment_by_program,
+        x="program",
+        y="employment_rate",
+        title="Employment Rate",
+        labels={
+            "program": "Training Program",
+            "employment_rate": "Employment Rate (%)"
+        },
+        text_auto=".1f"
+    )
+
+    st.plotly_chart(
+        fig_employment,
+        use_container_width=True
+    )
 
 # ==========================================
 # 12. REGIONAL PERFORMANCE
@@ -282,33 +371,81 @@ st.plotly_chart(
 
 
 # ==========================================
-# 13. ATTENDANCE VS SCORE IMPROVEMENT
+# REGIONAL & ATTENDANCE ANALYSIS
 # ==========================================
 
-st.subheader("Attendance vs. Score Improvement")
+st.divider()
 
-fig_scatter = px.scatter(
-    filtered_df,
-    x="attendance_pct",
-    y="score_improvement",
-    color="employment_status",
-    hover_data=[
-        "participant_id",
-        "program",
-        "region"
-    ],
-    title="Attendance vs. Score Improvement",
-    labels={
-        "attendance_pct": "Attendance (%)",
-        "score_improvement": "Score Improvement",
-        "employment_status": "Employment Status"
-    }
-)
+col1, col2 = st.columns(2)
 
-st.plotly_chart(
-    fig_scatter,
-    use_container_width=True
-)
+
+# ==========================================
+# REGIONAL PERFORMANCE
+# ==========================================
+
+with col1:
+
+    st.subheader("Regional Performance")
+
+    region_performance = (
+        filtered_df
+        .groupby("region", as_index=False)
+        .agg(
+            participants=("participant_id", "count"),
+            average_attendance=("attendance_pct", "mean"),
+            average_improvement=("score_improvement", "mean"),
+            average_satisfaction=("satisfaction", "mean")
+        )
+    )
+
+    fig_region = px.bar(
+        region_performance,
+        x="region",
+        y="average_improvement",
+        title="Average Score Improvement",
+        labels={
+            "region": "Region",
+            "average_improvement": "Score Improvement"
+        },
+        text_auto=".1f"
+    )
+
+    st.plotly_chart(
+        fig_region,
+        use_container_width=True
+    )
+
+
+# ==========================================
+# ATTENDANCE VS SCORE IMPROVEMENT
+# ==========================================
+
+with col2:
+
+    st.subheader("Attendance & Learning")
+
+    fig_scatter = px.scatter(
+        filtered_df,
+        x="attendance_pct",
+        y="score_improvement",
+        color="employment_status",
+        hover_data=[
+            "participant_id",
+            "program",
+            "region"
+        ],
+        title="Attendance vs. Score Improvement",
+        labels={
+            "attendance_pct": "Attendance (%)",
+            "score_improvement": "Score Improvement",
+            "employment_status": "Employment Status"
+        }
+    )
+
+    st.plotly_chart(
+        fig_scatter,
+        use_container_width=True
+    )
 
 # ==========================================
 # 14. PARTICIPANT PERFORMANCE
@@ -416,4 +553,55 @@ st.markdown(
     - Continue collecting data across multiple cohorts to determine
       whether the observed patterns remain consistent.
     """
+)
+# ==========================================
+# 17. PARTICIPANT DATA EXPLORER
+# ==========================================
+
+st.divider()
+
+st.subheader("Participant Data Explorer")
+
+st.write(
+    "Explore the participant records based on the selected filters."
+)
+
+explorer_columns = [
+    "participant_id",
+    "name",
+    "program",
+    "region",
+    "gender",
+    "education",
+    "attendance_pct",
+    "pre_score",
+    "post_score",
+    "score_improvement",
+    "employment_status",
+    "satisfaction",
+    "performance_flag"
+]
+
+st.dataframe(
+    filtered_df[explorer_columns],
+    use_container_width=True,
+    hide_index=True
+)
+# ==========================================
+# 18. FOOTER
+# ==========================================
+
+st.divider()
+
+st.caption(
+    "Youth Skills Data Insights | Data Analytics Portfolio Project"
+)
+
+st.caption(
+    "Built with Python, Pandas, Plotly, Streamlit, SQL, and SQLite."
+)
+
+st.caption(
+    "Note: This analysis is based on a sample of 15 participants "
+    "and should not be generalized without additional data."
 )
