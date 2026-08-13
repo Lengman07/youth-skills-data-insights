@@ -1,5 +1,23 @@
 # Youth Skills Data Insights
 
+## 🚀 Live Dashboard
+
+[Open the Interactive Dashboard](https://youth-skills-data-insights-aeoohniag99hqu7pgaovhs.streamlit.app/)
+
+Explore participant outcomes, program performance, employment,
+attendance, regional performance, and participants requiring attention.
+
+## 📊 Project Highlights
+
+- **15 participants** analyzed
+- **83.2%** average attendance
+- **23.73 points** average score improvement
+- **66.67%** observed employment rate
+- **4.13/5** average satisfaction
+- **20%** of participants flagged as needing attention
+- Interactive filtering by program, region, education, gender, and employment status
+- Deployed as a live Streamlit application
+
 Data analysis and insights project evaluating youth skills training program outcomes across learning performance, attendance, satisfaction, and employment.
 
 ## Project Overview
@@ -128,7 +146,7 @@ youth-skills-data-insights/
 ├── dashboard/
 │
 ├── notebooks/
-│   └── dti_analysis.ipynb
+│   └── analysis.ipynb
 │
 ├── reports/
 │   └── analysis_report.md
