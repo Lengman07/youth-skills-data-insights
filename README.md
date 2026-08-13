@@ -156,3 +156,47 @@ youth-skills-data-insights/
 │
 ├── README.md
 └── .gitignore
+
+## 💻 How to Run Locally
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Lengman07/youth-skills-data-insights.git
+cd youth-skills-data-insights
+```
+
+### 2. Create a virtual environment
+
+```bash
+python -m venv .venv
+```
+
+### 3. Activate the virtual environment
+
+#### Linux / macOS
+
+```bash
+source .venv/bin/activate
+```
+
+#### Windows
+
+```bash
+.venv\Scripts\activate
+```
+
+### 4. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 5. Run the dashboard
+
+```bash
+streamlit run dashboard/app.py
+```
+
+The dashboard will open locally in your browser.
+
